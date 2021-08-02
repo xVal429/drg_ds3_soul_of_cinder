@@ -1,0 +1,47 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/soc/c5280_HD_a"
+	"$bumpmap" "models/soc/c5280_HD_N"
+	$color2 "[0.52 0.52 0.52]"
+	"$alphatest" 1
+	"$nocull" 1
+	
+	$nodecal 1
+	"$normalmapalphaenvmapmask"    "1"
+	"$phong" "1"
+	"$phongexponent"				"1"
+	"$phongboost"					"3.996837"
+	"$phongfresnelranges"			"[0.67 0.83 1]"
+
+	"$phongalbedotint" 1
+	"$phongexponenttexture" "models\Dark_Souls\shared\souls_green"
+	"$phongwarptexture" "models\Dark_Souls\shared\testwarp2"
+
+	"$envcubemap" "models\Dark_Souls\shared\painted_silver_ldr"
+	"$envcubemaptint""[0.00125 0.00124 0.00115]"
+	"$envcubemapfresnel""1"
+
+	"$detail" "models/soc/c5280_HD_r"
+	$detailscale 1
+	$detailblendmode 1
+	$detailblendfactor 1
+
+	$emissiveBlendEnabled 1
+	$emissiveBlendTexture	"dev/null"
+	$emissiveBlendBaseTexture	"models/soc/c5280_hd_EM"
+	$emissiveBlendFlowTexture	"dev/null"
+	$emissiveBlendTint "[1.8 1.4 1.2]"
+	$emissiveBlendStrength 1
+	$emissiveBlendScrollVector "[0 0]"
+
+	Proxies
+	    {
+	        Sine
+	        {
+	            resultVar    $emissiveBlendTint // The shader parameter to be manipulated
+	            sineperiod    3
+	            sinemin        1
+	            sinemax        1.8
+	        }
+	    }
+}

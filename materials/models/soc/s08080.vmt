@@ -1,0 +1,24 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/soc/s08080"
+	"$nocull" 1
+	"$additive" 1
+	$emissiveBlendEnabled 1
+	$emissiveBlendTexture	"dev/null"
+	$emissiveBlendBaseTexture	"models/soc/s08080"
+	$emissiveBlendFlowTexture	"dev/null"
+	$emissiveBlendTint "[1 1 1]"
+	$emissiveBlendStrength 1
+	$emissiveBlendScrollVector "[0 0]"
+
+	Proxies
+	{
+		Sine
+	     	{
+	           		resultVar    $emissiveBlendTint // The shader parameter to be manipulated
+	           		sineperiod    1
+	           		sinemin        2
+	          		sinemax        3
+	      	}
+	}
+}
