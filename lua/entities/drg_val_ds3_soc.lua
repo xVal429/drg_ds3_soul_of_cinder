@@ -180,6 +180,25 @@ refAtks = {
 }
 
 if SERVER then
+  function ENT:CinderDamageInfo(attstart, attend, wpn, dmgamnt, dmgtype, range)
+    -- contingency plans for if the data provided is invalid/nil 
+    if attstart == nil then attstart = 5 end
+    if wpn == nil then wpn = 1 end
+    if dmgamnt == nil then dmgamnt = 10 end
+    if dmgtype == nil then dmgtype = DMG_BLAST end  
+    if range == nil then range = 10 end
+    
+    local dmgInfo = DamageInfo()
+      dmgInfo:SetDamage(dmgamnt)
+      dmgInfo:SetDamageType(dmgtype)
+      dmgInfo:SetAttacker(self)
+      dmgInfo:SetInflictor(self)
+    for k,v in pairs(ents.FindInSphere(self:GetAttachment(attstart).Pos, range)) do v:TakeDamageInfo(dmgInfo) end
+    if attend != nil then for k,v in pairs(ents.FindInSphere(self:GetAttachment(attend).Pos, range)) do v:TakeDamageInfo(dmgInfo) end end
+
+
+  end
+
   function ENT:CinderDmgInfo()
     local dmgUnarmed = DamageInfo()
       dmgUnarmed:SetDamage(60)
@@ -275,6 +294,7 @@ if SERVER then
         ParticleEffectAttach("ds3_flamesword_swing",PATTACH_POINT_FOLLOW,self,7)ParticleEffectAttach("ds3_flamesword_swing",PATTACH_POINT_FOLLOW,self,8)ParticleEffectAttach("ds3_flamesword_swing",PATTACH_POINT_FOLLOW,self,3)
         self:Timer(num,function()self:StopParticles()cFire:Remove(self)end)
     end end
+  
 
   -- DEPRECATED, NEED TO REMOVE.
   function ENT:CinderFlameTrail()
@@ -426,7 +446,10 @@ if SERVER then
         for i = 23, 27 do self:SequenceEvent("Attack0",i/84,function(self)self:CinderDmgInfo()end) end
         self:SequenceEvent("Attack0",23/84,function(self)self:CinderFlameTrail()end)
       -- Attack0_1
+        self:SequenceEvent("Attack0_1",15/57,function(self)if self.Wpn != 1 and self.Wpn != 5 then self:EmitSound("soc/fireball_explode_0.mp3",85)end end)
+        self:SequenceEvent("Attack0_1",16/57,function(self)self:EmitSound("soc/whoosh_"..math.random(0,2)..".mp3",65,70)end)
         self:SequenceEvent("Attack0_1",20/57,function(self)self:CinderFlameTrailImproved(0.2, self.WpnN, "f")end)
+        for i = 18,21 do self:SequenceEvent("Attack0_1",i/57,function(self)self:CinderDamageInfo(7, 11, lance, 60, DMG_BLAST, 40)end) end
       -- Attack5_2
         self:SequenceEvent("Attack5_2",16/87,function(self)self:EmitSound("soc/sfx_step_skid_"..math.random(0,2)..".mp3")ParticleEffectAttach("brutus_burning_footstep", PATTACH_POINT_FOLLOW, self, 12)end)
         self:SequenceEvent("Attack5_2",18/87,function(self)FootstepR()end)
@@ -654,6 +677,7 @@ if SERVER then
     ["ms3atk"]="Long Range"}
   ms1atk = { -- close range
     "Attack0",
+    "Attack0_1",
     "Attack11_5",
     "Attack12_5",
     "Attack22"}
@@ -696,6 +720,10 @@ if SERVER then
     self.IsSitting = false 
   end
   
+  function ENT:ClearAttackedEnts()
+    self.AttackedEntities = {}
+  end
+
   function ENT:CanDodge()
     return !self.IsSitting
   end
@@ -710,7 +738,7 @@ if SERVER then
       "Attack22", -- slice ground up
       "Attack11_5" -- sword slam into ground
     }
-    self:PlaySequenceAndMove(table.Random(atks), 1, self.FaceEnemy)
+    self:PlaySequenceAndMove(table.Random(ms1atk), 1, self.FaceEnemy)
   end
   function ENT:CustomInitialize() 
     self:SetDefaultRelationship(D_NU)
@@ -843,8 +871,15 @@ if CLIENT then
 ENT.RenderGroup = RENDERGROUP_BOTH
 ENT.HUDMatPos_Main = Material("hud/ds1/boss_hpbar.png", "smooth unlitgeneric")
 ENT.HUDMat_Bar = Material("hud/ds1/boss_hpbar_red.png", "smooth unlitgeneric")
+ENT.BOGOSBINTED = Material("hud/ds1/satisfaction_-_the_texture.png", "smooth unlitgeneric")
 ENT.HUDMat_Bar2 = Material("hud/ds1/boss_hpbar_ylw.png", "smooth unlitgeneric")
   function ENT:PossessionHUD()
+    --[[render.SetMaterial(self.BOGOSBINTED)
+    render.DrawScreenQuadEx(
+      128, 
+      256, 
+      self.HUDMatPos_Main:Width()*1.3,
+			self.HUDMatPos_Main:Height()*1.3)]]
     local hp = math.Round(self:Health())
     local hpmax = self.SpawnHealth
     local widthscale = (hp/hpmax)
@@ -883,6 +918,18 @@ ENT.HUDMat_Bar2 = Material("hud/ds1/boss_hpbar_ylw.png", "smooth unlitgeneric")
       "Dark_Font", 
       35,
       145, 
+      color_white)
+    draw.SimpleText(
+      "BOGOS BINTED",
+      "Dark_Font",
+      ScrW()/2-111,
+      ScrH()/1.5+200,
+      color_white)
+    draw.SimpleText(
+      "if u see this dm me racial slurs",
+      "Dark_Font",
+      ScrW()/2-170,
+      ScrH()/1.5+225,
       color_white)
   end
 end
