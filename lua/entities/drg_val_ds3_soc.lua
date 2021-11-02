@@ -17,7 +17,7 @@ Dark Souls 1 Base by Roach (for sounds)
 ]]
 -- Misc --
 ENT.PrintName = "Soul of Cinder"
-ENT.Category = "Dark Souls 3"
+ENT.Category = "Val's Nextbots"
 ENT.Models = {"models/soc/val_soc.mdl"}
 ENT.ModelScale = 1
 ENT.CollisionBounds = Vector(15, 25, 120)

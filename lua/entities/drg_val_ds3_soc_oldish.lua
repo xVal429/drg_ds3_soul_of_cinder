@@ -2,8 +2,8 @@ if not DrGBase then return end -- return if DrGBase isn't installed
 ENT.Base = "drgbase_nextbot" -- DO NOT TOUCH (obviously)
 
 -- Misc --
-ENT.PrintName = "Soul of Cinder (OLD)"
-ENT.Category = "Val's Nextbots"
+ENT.PrintName = "Soul of Cinder (Old)"
+ENT.Category = "Val's Nextbots - Archives"
 ENT.Models = {"models/soc/decompiled 0.68/compiled 0.68/models/SoC.mdl"}
 ENT.ModelScale = 1
 ENT.CollisionBounds = Vector(10, 10, 150)
